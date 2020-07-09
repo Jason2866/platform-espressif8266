@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/platformio/platform-espressif8266.git"
   },
-  "version": "2.5.3",
+  "version": "2.9.0",
   "packageRepositories": [
     "https://github.com/Jason2866/platform-espressif8266/releases/download/3.0.0-gnu12/manifest.json",
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
@@ -25,17 +25,6 @@
       "package": "framework-arduinoespressif8266",
       "script": "builder/frameworks/arduino.py"
     },
-    "simba": {
-      "package": "framework-simba",
-      "script": "builder/frameworks/simba.py"
-    },
-    "esp8266-rtos-sdk": {
-      "package": "framework-esp8266-rtos-sdk",
-      "script": "builder/frameworks/esp8266-rtos-sdk.py",
-      "description": "ESP8266 SDK based on FreeRTOS, a truly free professional grade RTOS for microcontrollers",
-      "homepage": "https://github.com/espressif/ESP8266_RTOS_SDK",
-      "title": "ESP8266 RTOS SDK"
-    },
     "esp8266-nonos-sdk": {
       "package": "framework-esp8266-nonos-sdk",
       "script": "builder/frameworks/esp8266-nonos-sdk.py",
@@ -47,27 +36,17 @@
   "packages": {
     "toolchain-xtensa": {
       "type": "toolchain",
-      "version": "=5.01010.200706"
+      "version": ">=5"
     },
     "framework-arduinoespressif8266": {
       "type": "framework",
       "optional": true,
-      "version": "=3.20900.0"
-    },
-    "framework-esp8266-rtos-sdk": {
-      "type": "framework",
-      "optional": true,
-      "version": ">=1.5.0-beta"
+      "version": "~3.20900.0"
     },
     "framework-esp8266-nonos-sdk": {
       "type": "framework",
       "optional": true,
       "version": ">=2.1.0"
-    },
-    "framework-simba": {
-      "type": "framework",
-      "optional": true,
-      "version": ">=7.0.0"
     },
     "tool-esptool": {
       "type": "uploader",
