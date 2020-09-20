@@ -13,6 +13,7 @@
   },
   "version": "2.9.0",
   "packageRepositories": [
+    "https://github.com/Jason2866/platform-espressif8266/releases/download/3.0.0-gnu13/manifest.json",
     "https://github.com/Jason2866/platform-espressif8266/releases/download/3.0.0-gnu12/manifest.json",
     "https://dl.bintray.com/platformio/dl-packages/manifest.json",
     "http://dl.platformio.org/packages/manifest.json",
@@ -36,7 +37,7 @@
   "packages": {
     "toolchain-xtensa": {
       "type": "toolchain",
-      "version": ">=5"
+      "version": "~5.100200.200918"
     },
     "framework-arduinoespressif8266": {
       "type": "framework",
