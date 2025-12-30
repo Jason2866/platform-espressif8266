@@ -17,7 +17,6 @@
 import functools
 import re
 import sys
-import struct
 import shutil
 import subprocess
 import importlib.util
