@@ -319,8 +319,7 @@ def build_fatfs_image(target, source, env):
     target_file = str(target[0])
     fs_size = env["FS_SIZE"]
     sector_size = env.get("FS_SECTOR", 4096)
-    
-    from fatfs import calculate_esp32_wl_overhead
+
     wl_info = calculate_esp32_wl_overhead(fs_size, sector_size)
     
     wl_reserved_sectors = wl_info['wl_overhead_sectors']
@@ -332,7 +331,8 @@ def build_fatfs_image(target, source, env):
         disk = RamDisk(storage, sector_size=sector_size, sector_count=sector_count)
         base_partition = Partition(disk)
 
-        from fatfs.wrapper import pyf_mkfs, PY_FR_OK as FR_OK
+        from fatfs.wrapper import pyf_mkfs
+        FR_OK = 0  # PY_FR_OK constant
         workarea_size = sector_size * 2
         
         ret = pyf_mkfs(
@@ -754,13 +754,13 @@ def _parse_spiffs_config(fs_data, fs_size):
     
     print("\nAuto-detecting SPIFFS configuration...")
     
-    for i, config in enumerate(common_configs, 1):
+    for i, cfg in enumerate(common_configs, 1):
         try:
-            print(f"  Try {i}: page_size={config['page_size']}, block_size={config['block_size']}, obj_name_len={config['obj_name_len']}")
+            print(f"  Try {i}: page_size={cfg['page_size']}, block_size={cfg['block_size']}, obj_name_len={cfg['obj_name_len']}")
             
             # Try to parse with this configuration
             spiffs_build_config = SpiffsBuildConfig(
-                page_size=config['page_size'],
+                page_size=cfg['page_size'],
                 page_ix_len=2,
                 block_size=config['block_size'],
                 block_ix_len=2,
