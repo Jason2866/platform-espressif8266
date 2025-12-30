@@ -319,8 +319,6 @@ def build_fatfs_image(target, source, env):
     fs_size = env["FS_SIZE"]
     sector_size = env.get("FS_SECTOR", 4096)
 
-    wl_info = calculate_esp32_wl_overhead(fs_size, sector_size)
-
     fat_fs_size = wl_info['fat_size']
     sector_count = wl_info['fat_sectors']
 
