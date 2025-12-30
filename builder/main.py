@@ -760,10 +760,10 @@ def _parse_spiffs_config(fs_data, fs_size):
             spiffs_build_config = SpiffsBuildConfig(
                 page_size=cfg['page_size'],
                 page_ix_len=2,
-                block_size=config['block_size'],
+                block_size=cfg['block_size'],
                 block_ix_len=2,
                 meta_len=4,
-                obj_name_len=config['obj_name_len'],
+                obj_name_len=cfg['obj_name_len'],
                 obj_id_len=2,
                 span_ix_len=2,
                 packed=True,
@@ -782,9 +782,9 @@ def _parse_spiffs_config(fs_data, fs_size):
             print(f"  Successfully detected SPIFFS configuration {i}")
             
             return {
-                'page_size': config['page_size'],
-                'block_size': config['block_size'],
-                'obj_name_len': config['obj_name_len'],
+                'page_size': cfg['page_size'],
+                'block_size': cfg['block_size'],
+                'obj_name_len': cfg['obj_name_len'],
                 'meta_len': 4,
                 'use_magic': True,
                 'use_magic_len': True,
