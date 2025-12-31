@@ -58,20 +58,6 @@
       "package-version": "3.4.4",
       "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/contrib-piohome-3.4.4.tar.gz"
     },
-    "tool-mklittlefs": {
-      "type": "uploader",
-      "optional": true,
-      "owner": "pioarduino",
-      "package-version": "1.203.210628",
-      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/mklittlefs-2.3.0.zip"
-    },
-    "tool-mkfatfs": {
-      "type": "uploader",
-      "optional": true,
-      "owner": "pioarduino",
-      "package-version": "2.0.1",
-      "version": "https://github.com/pioarduino/registry/releases/download/0.0.1/mkfatfs-v2.0.1.zip"
-    },
     "tool-cppcheck": {
       "type": "tool",
       "optional": true,

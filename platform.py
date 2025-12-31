@@ -566,23 +566,6 @@ class Espressif8266Platform(PlatformBase):
             if any(tool in package for tool in check_tools):
                 self.install_tool(package)
 
-    def _install_filesystem_tool(self, filesystem: str) -> None:
-        """Install filesystem-specific tools based on the filesystem type."""
-        tool_mapping = {
-            "default": lambda: self.install_tool("tool-mklittlefs"),
-            "fatfs": lambda: self.install_tool("tool-mkfatfs")
-        }
-
-        handler = tool_mapping.get(filesystem, tool_mapping["default"])
-        handler()
-
-    def _configure_filesystem_tools(self, variables: Dict, targets: List[str]) -> None:
-        """Configure filesystem tools based on build targets and filesystem type."""
-        filesystem = variables.get("board_build.filesystem", "littlefs")
-
-        if any(target in targets for target in ["buildfs", "uploadfs", "downloadfs"]):
-            self._install_filesystem_tool(filesystem)
-
     def setup_python_env(self, env):
         """Configure SCons environment with centrally managed Python executable paths."""
         # Python environment is centrally managed in configure_default_packages
@@ -620,7 +603,6 @@ class Espressif8266Platform(PlatformBase):
             self._install_common_packages()
             self._configure_arduino_framework(frameworks)
             self._configure_toolchain()
-            self._configure_filesystem_tools(variables, targets)
             self._configure_check_tools(variables)
 
             logger.info("Package configuration completed successfully")
