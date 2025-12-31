@@ -823,24 +823,24 @@ def _extract_spiffs(fs_file, fs_size, unpack_path, unpack_dir):
         fs_data = f.read()
 
     # Auto-detect SPIFFS configuration
-    config = _parse_spiffs_config(fs_data, fs_size)
+    spiffs_config = _parse_spiffs_config(fs_data, fs_size)
     
     # Create SPIFFS build configuration
     spiffs_build_config = SpiffsBuildConfig(
-        page_size=config['page_size'],
+        page_size=spiffs_config['page_size'],
         page_ix_len=2,
-        block_size=config['block_size'],
+        block_size=spiffs_config['block_size'],
         block_ix_len=2,
-        meta_len=config['meta_len'],
-        obj_name_len=config['obj_name_len'],
+        meta_len=spiffs_config['meta_len'],
+        obj_name_len=spiffs_config['obj_name_len'],
         obj_id_len=2,
         span_ix_len=2,
         packed=True,
         aligned=True,
         endianness='little',
-        use_magic=config['use_magic'],
-        use_magic_len=config['use_magic_len'],
-        aligned_obj_ix_tables=config['aligned_obj_ix_tables']
+        use_magic=spiffs_config['use_magic'],
+        use_magic_len=spiffs_config['use_magic_len'],
+        aligned_obj_ix_tables=spiffs_config['aligned_obj_ix_tables']
     )
 
     # Create SPIFFS filesystem and parse the image
