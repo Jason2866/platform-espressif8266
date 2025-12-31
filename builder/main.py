@@ -955,7 +955,8 @@ def download_fs_action(target, source, env):
         header = f.read(8192)
     
     # Check for filesystem signatures
-    if b'littlefs' in header:
+    # LittleFS magic is at offset 8 of the superblock
+    if len(header) >= 16 and header[8:16] == b'littlefs':
         fs_type = "littlefs"
     elif header[510:512] == b'\x55\xAA':  # FAT boot signature
         fs_type = "fatfs"
