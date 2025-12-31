@@ -734,7 +734,7 @@ def _extract_littlefs(fs_file, fs_size, unpack_path, unpack_dir):
         print(f"\nError during extraction: {e}")
         try:
             fs.unmount()
-        except:
+        except Exception:
             pass
         return 1
 
