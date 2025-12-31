@@ -952,16 +952,42 @@ def download_fs_action(target, source, env):
     
     # Detect filesystem type
     with open(fs_file, 'rb') as f:
-        header = f.read(8192)
+        header = f.read(16384)  # Read more to check for offset FAT
     
     # Check for filesystem signatures
-    # LittleFS magic is at offset 8 of the superblock
+    fs_type = None
+    
+    # 1. Check for LittleFS magic at offset 8 of the superblock
     if len(header) >= 16 and header[8:16] == b'littlefs':
         fs_type = "littlefs"
-    elif header[510:512] == b'\x55\xAA':  # FAT boot signature
-        fs_type = "fatfs"
-    else:
-        fs_type = "spiffs"  # Default for ESP8266
+    
+    # 2. Check for FAT filesystem (with or without Wear Leveling)
+    if fs_type is None:
+        # Check multiple possible offsets for FAT boot sector
+        # ESP8266 with WL often has FAT at offset 0x1000 (4096)
+        fat_offsets = [0, 4096, 8192]
+        
+        for offset in fat_offsets:
+            if len(header) >= offset + 512:
+                boot_sector = header[offset:offset+512]
+                
+                # Check for FAT boot signature at offset 510-511
+                if boot_sector[510:512] == b'\x55\xAA':
+                    # Additional validation: check for FAT filesystem markers
+                    # Check for "FAT" string or "MSDOS" in boot sector
+                    if (b'FAT' in boot_sector[0:90] or 
+                        b'MSDOS' in boot_sector[0:90] or
+                        b'MSWIN' in boot_sector[0:90]):
+                        # Verify bytes per sector
+                        bytes_per_sector = int.from_bytes(boot_sector[11:13], byteorder='little')
+                        if bytes_per_sector in [512, 1024, 2048, 4096]:
+                            fs_type = "fatfs"
+                            print(f"  FAT boot sector found at offset 0x{offset:x}")
+                            break
+    
+    # 3. Default to SPIFFS for ESP8266
+    if fs_type is None:
+        fs_type = "spiffs"
     
     print(f"\nDetected filesystem: {fs_type.upper()}")
     
