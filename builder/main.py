@@ -318,18 +318,11 @@ def build_fatfs_image(target, source, env):
     target_file = str(target[0])
     fs_size = env["FS_SIZE"]
     sector_size = env.get("FS_SECTOR", 4096)
-
-    # Calculate wear-leveling overhead
-    # ESP32 WL uses ~2 sectors for state + additional overhead
-    wl_sectors_overhead = 2 + (fs_size // sector_size) // 16
-    fat_sectors = (fs_size // sector_size) - wl_sectors_overhead
-    fat_size = fat_sectors * sector_size
     
-    wl_info = {
-        'fat_size': fat_size,
-        'fat_sectors': fat_sectors
-    }
-
+    from fatfs import calculate_esp32_wl_overhead
+    wl_info = calculate_esp32_wl_overhead(fs_size, sector_size)
+    
+    wl_reserved_sectors = wl_info['wl_overhead_sectors']
     fat_fs_size = wl_info['fat_size']
     sector_count = wl_info['fat_sectors']
 
