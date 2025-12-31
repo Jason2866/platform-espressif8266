@@ -182,7 +182,7 @@ def build_fs_image(target, source, env):
     block_count = fs_size // block_size
 
     # Get disk version from board config or project options
-    # ESP8266 Tasmoat Arduino framework uses LittleFS v2.0
+    # ESP8266 Tasmota Arduino framework uses LittleFS v2.0
     disk_version_str = "2.0"
     
     for section in ["common", "env:" + env["PIOENV"]]:
@@ -318,6 +318,17 @@ def build_fatfs_image(target, source, env):
     target_file = str(target[0])
     fs_size = env["FS_SIZE"]
     sector_size = env.get("FS_SECTOR", 4096)
+
+    # Calculate wear-leveling overhead
+    # ESP32 WL uses ~2 sectors for state + additional overhead
+    wl_sectors_overhead = 2 + (fs_size // sector_size) // 16
+    fat_sectors = (fs_size // sector_size) - wl_sectors_overhead
+    fat_size = fat_sectors * sector_size
+    
+    wl_info = {
+        'fat_size': fat_size,
+        'fat_sectors': fat_sectors
+    }
 
     fat_fs_size = wl_info['fat_size']
     sector_count = wl_info['fat_sectors']
@@ -662,7 +673,7 @@ def _extract_littlefs(fs_file, fs_size, unpack_path, unpack_dir):
                 cache_size=cfg['block_size'],
                 lookahead_size=32,
                 block_cycles=500,
-                name_max=64,
+                name_max=32,
                 mount=False
             )
             fs.context.buffer = bytearray(fs_data)
@@ -890,7 +901,6 @@ def _extract_fatfs(fs_file, unpack_path, unpack_dir):
 
     print(f"  Detected sector size: {sector_size} bytes")
 
-    from fatfs import RamDisk, create_extended_partition
     fs_size_adjusted = len(fs_data)
     sector_count = fs_size_adjusted // sector_size
     
